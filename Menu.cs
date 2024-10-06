@@ -71,15 +71,7 @@ public class Menu
                 Type TypeOfT = typeof(T);
                 if (TypeOfT == typeof(string))
                 {
-                    string chosenMenuIndex = _menuOptions[_currentMenuIndex];
-                    if (_menuActions.TryGetValue(chosenMenuIndex.ToString(), out MenuAction action))
-                    {
-                        action.Invoke();
-                    }
-                    else
-                    {
-                        WriteLine("Error! No such menu index!");
-                    }
+                    PressEnterMainMenu();
                 }
                 else if (TypeOfT == typeof(Car))
                 {
@@ -91,6 +83,19 @@ public class Menu
                 }
                 break;
         }
+    }
+
+    private void PressEnterMainMenu()
+    {
+        string chosenMenuIndex = _menuOptions[_currentMenuIndex];
+        if (_menuActions.TryGetValue(chosenMenuIndex.ToString(), out MenuAction action))
+        {
+            action.Invoke();
+        }
+        else
+        {
+            WriteLine("Error! No such menu index!");
+        }  
     }
     
     private void RepairCarPart()
