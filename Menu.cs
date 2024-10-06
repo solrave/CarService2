@@ -37,7 +37,7 @@ public class Menu
     public void RunMenu()
     {
         ShowMenu(_menuOptions);
-        SwitchOnMainMenu(_menuOptions);
+        SwitchMenu(_menuOptions);
     }
     
     
@@ -54,7 +54,7 @@ public class Menu
         
     }
     
-    private void SwitchOnMainMenu<T>(List<T> list)
+    private void SwitchMenu<T>(List<T> list)
     {
         ConsoleKeyInfo userInput = ReadKey();
         switch (userInput.Key)
@@ -75,11 +75,11 @@ public class Menu
                 }
                 else if (TypeOfT == typeof(Car))
                 {
-                    
+                    ShowParticularCar();
                 }
                 else if (TypeOfT == typeof(CarPart))
                 {
-                    
+                    RepairCarPart();
                 }
                 break;
         }
@@ -118,8 +118,9 @@ public class Menu
     {
         WriteLine("These are clients for today:");
         ShowMenu(_street.Clients);
+        SwitchMenu(_street.Clients);
         WriteLine("Choose client to serve by pressing UP and DOWN arrows.");
-        Thread.Sleep(7000);
+        //Thread.Sleep(7000);
     }
 
     private void ShowStorage()
