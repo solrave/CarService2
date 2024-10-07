@@ -19,8 +19,8 @@ public class MarketGenerator//Здесь создаётся список пол�
 
     private void CreateSomeCars()
     {
-        _clients = new List<Car>(4);
-        for (var i = 0; i < _clients.Capacity; i++) _clients.Add(new Car());
+        _clients = new List<Car>();
+        for (var i = 0; i < 5; i++) _clients.Add(new Car());
     }
     
     public void ShowClientQueue()

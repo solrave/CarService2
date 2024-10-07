@@ -26,7 +26,7 @@ public class Car : IMoneyUser, IListAsMenu
     {
         _money = 500;
         _carBrand = AssignRandomCarBrand(); //Назначается случайная марка авто.
-        _carEquipment = new List<CarPart>(5);
+        _carEquipment = new List<CarPart>();
         _carEquipment.Add(new CarPart("Wheel"));
         _carEquipment.Add(new CarPart("Wheel"));
         _carEquipment.Add(new CarPart("Wheel"));
@@ -49,7 +49,7 @@ public class Car : IMoneyUser, IListAsMenu
 
     public override string ToString()
     {
-        var sb = new StringBuilder($"Brand:{_carBrand}\n Money:{_money}\n");
+        var sb = new StringBuilder($"Brand:{_carBrand} Money:{_money}");
         //foreach (var part in _carEquipment) sb.Append($"{part}\n");
         return sb.ToString();
     }

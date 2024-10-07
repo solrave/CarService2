@@ -17,6 +17,7 @@ public class Menu
     private CarService _carService;
     private Storage _storage;
     private Car CarToRepair;
+    private bool run;
     public Menu(MarketGenerator street, CarService carService, Storage storage)
     {
         _mainMenu = new() { { "Start the Work" }, { "Show the Storage" }, { "Exit the Program" } };
@@ -54,12 +55,16 @@ public class Menu
         switch (menuPosition)
         {
             case CurrentMenu.MainMenu:
+                WriteLine("Welcome to the Car Service!");
                 ShowMenu(_mainMenu);
                 break;
             case CurrentMenu.CarMenu:
+                WriteLine("These are your clients for today:");
                 ShowMenu(_clientList.Clients);
                 break;
             case CurrentMenu.PartMenu:
+                WriteLine($"{_clientList.Clients[_menuObject].CarBrand}");
+                WriteLine("Choose a part you want to replace:");
                 ShowMenu(_clientList.Clients[_menuObject].CarEquipment);
                 break;
             case CurrentMenu.StorageMenu:
@@ -102,10 +107,12 @@ public class Menu
                     
                     case CurrentMenu.CarMenu:
                         ShowParticularCar();
+                        run = false;
                         break;
                     
                     case CurrentMenu.PartMenu:
                         RepairCarPart();
+                        run = false;
                         break;
                     
                     case CurrentMenu.StorageMenu:
@@ -131,29 +138,39 @@ public class Menu
     
     private void RepairCarPart()
     {
-        ClearConsole();
-        WriteLine(CarToRepair);
-        WriteLine(CarToRepair.CarEquipment[_menuObject]);
-        WriteLine("Choose the part to replace from storage:");
-        MenuHandler(CurrentMenu.StorageMenu);
-        SwitchMenu(CurrentMenu.StorageMenu);
+        run = true;
+        _menuObject = 0;
+        while (run)
+        {
+            MenuHandler(CurrentMenu.StorageMenu);
+            SwitchMenu(CurrentMenu.StorageMenu); 
+        }
     }
 
     private void ShowParticularCar()
     {
-        ClearConsole();
-        WriteLine(CarToRepair);
-        MenuHandler(CurrentMenu.PartMenu);
-        SwitchMenu(CurrentMenu.PartMenu);
+        _menuObject = 0;
+        run = true;
+        while (run)
+        {
+            MenuHandler(CurrentMenu.PartMenu);
+            SwitchMenu(CurrentMenu.PartMenu); 
+        }
+        
+        
         
     }
     private void StartWork()
     {
-        WriteLine("These are clients for today:");
-        MenuHandler(CurrentMenu.CarMenu);
-        SwitchMenu(CurrentMenu.CarMenu);
-        WriteLine("Choose client to serve by pressing UP and DOWN arrows.");
-        Thread.Sleep(7000);
+        run = true;
+        while (run)
+        {
+            WriteLine("These are clients for today:");
+            MenuHandler(CurrentMenu.CarMenu);
+            WriteLine("Choose client to serve by pressing UP and DOWN arrows.");
+            SwitchMenu(CurrentMenu.CarMenu);
+        }
+        
     }
 
     private void ShowStorage()
