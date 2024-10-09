@@ -4,5 +4,5 @@ public interface IMoneyUser
 {
     int Money { get; set; }
 
-    void TransferMoneyTo(IMoneyUser receiver, int amount);
+    //void TransferMoneyTo(IMoneyUser receiver, int amount);
 }

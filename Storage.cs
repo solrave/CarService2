@@ -25,18 +25,10 @@ public class Storage : IListAsMenu
         };
     }
 
-    public CarPart GetPartFromStorage(string name)
+    public CarPart GetPartFromStorage(int part)
     {
-        CarPart temp = new CarPart("Wheel");
-        for (int i = 0; i < _stock.Count; i++)
-        {
-            if (_stock[i].Name == name)
-            {
-                temp = _stock[i];
-                _stock.RemoveAt(i);
-            }
-        }
-
+        CarPart temp = Stock[part];
+        Stock.RemoveAt(part);
         return temp;
     }
 

@@ -12,6 +12,7 @@
         <Link>Program.cs</Link>
       </Compile>
       <Compile Remove="Program.cs" />
+      <Compile Remove="ReplacePartlJob.cs" />
     </ItemGroup>
 
 </Project>

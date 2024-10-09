@@ -3,7 +3,7 @@ using static System.Console;
 
 enum CurrentMenu
 {
-    MainMenu, CarMenu, PartMenu, StorageMenu
+    MainMenu, CarList, PartList, StorageList
 }
 public class Menu
 {
@@ -13,6 +13,9 @@ public class Menu
     private int _menuIndexLower;
     private int _menuIndexUpper;
     private int _menuObject;
+    private int _selectedCar;
+    private int _selectedPart;
+    private int _selectedStoragePart;
     private MarketGenerator _clientList;
     private CarService _carService;
     private Storage _storage;
@@ -28,8 +31,8 @@ public class Menu
         _menuObject = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
-        {"Start the Work", new (this.StartWork)},
-        {"Show the Storage", new (this.ShowStorage)},
+        {"Start the Work", new (this.ShowCarList)},
+        {"Show the Storage", new (this.ShowMyStorage)},
         {"Exit the Program", new (this.ExitProgram)}
     };
     }
@@ -58,16 +61,17 @@ public class Menu
                 WriteLine("Welcome to the Car Service!");
                 ShowMenu(_mainMenu);
                 break;
-            case CurrentMenu.CarMenu:
+            case CurrentMenu.CarList:
                 WriteLine("These are your clients for today:");
                 ShowMenu(_clientList.Clients);
                 break;
-            case CurrentMenu.PartMenu:
+            case CurrentMenu.PartList:
                 WriteLine($"{_clientList.Clients[_menuObject].CarBrand}");
                 WriteLine("Choose a part you want to replace:");
                 ShowMenu(_clientList.Clients[_menuObject].CarEquipment);
                 break;
-            case CurrentMenu.StorageMenu:
+            case CurrentMenu.StorageList:
+                WriteLine("Choose part to replace from storage:");
                 ShowMenu(_storage.Stock);
                 break;
         }
@@ -101,29 +105,29 @@ public class Menu
             case ConsoleKey.Enter:
                 switch (position)
                 {
-                    case CurrentMenu.MainMenu:
+                    case CurrentMenu.MainMenu: //invoke ShowCarList method, show Car list.
                         MainMenuAction();
                         break;
                     
-                    case CurrentMenu.CarMenu:
-                        ShowParticularCar();
+                    case CurrentMenu.CarList:
+                        ShowParticularCar(); //Should save selected car for later.
                         run = false;
                         break;
                     
-                    case CurrentMenu.PartMenu:
-                        RepairCarPart();
+                    case CurrentMenu.PartList:
+                        ShowStorage();
                         run = false;
                         break;
                     
-                    case CurrentMenu.StorageMenu:
-                        //replace Car Part
+                    case CurrentMenu.StorageList:
+                        ReplaceCarPart();
                         break;
                 }
                 break;
         }
     }
 
-    private void MainMenuAction()
+    private void MainMenuAction() //Enter key
     {
         string chosenMenuIndex = _mainMenu[_menuObject];
         if (_menuActions.TryGetValue(chosenMenuIndex.ToString(), out MenuAction action))
@@ -136,44 +140,53 @@ public class Menu
         }  
     }
     
-    private void RepairCarPart()
+    private void ShowStorage() //Enter key
     {
         run = true;
+        _selectedPart = _menuObject;
         _menuObject = 0;
         while (run)
         {
-            MenuHandler(CurrentMenu.StorageMenu);
-            SwitchMenu(CurrentMenu.StorageMenu); 
+            MenuHandler(CurrentMenu.StorageList);
+            SwitchMenu(CurrentMenu.StorageList); 
         }
     }
 
-    private void ShowParticularCar()
+    private void ShowParticularCar() //Enter key
     {
+        _selectedCar = _menuObject;
         _menuObject = 0;
         run = true;
         while (run)
         {
-            MenuHandler(CurrentMenu.PartMenu);
-            SwitchMenu(CurrentMenu.PartMenu); 
+            MenuHandler(CurrentMenu.PartList);
+            SwitchMenu(CurrentMenu.PartList); 
         }
         
         
         
     }
-    private void StartWork()
+    private void ShowCarList() //Invoke from delegates list
     {
         run = true;
         while (run)
         {
             WriteLine("These are clients for today:");
-            MenuHandler(CurrentMenu.CarMenu);
+            MenuHandler(CurrentMenu.CarList);
             WriteLine("Choose client to serve by pressing UP and DOWN arrows.");
-            SwitchMenu(CurrentMenu.CarMenu);
+            SwitchMenu(CurrentMenu.CarList);
         }
         
     }
 
-    private void ShowStorage()
+    private void ReplaceCarPart()
+    {
+        _selectedStoragePart = _menuObject;
+        _carService.PerformJob(_clientList.Clients[_selectedCar], _selectedPart, _storage, _selectedStoragePart);
+        WriteLine("Part have been replaced!");
+    }
+
+    private void ShowMyStorage()
     {
         ClearConsole();
         WriteLine("Showing the storage!");
