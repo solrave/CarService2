@@ -16,6 +16,9 @@ public class Menu
     private int _selectedCar;
     private int _selectedPart;
     private int _selectedStoragePart;
+    private int _carPartsIndex;
+    private Car _selectedCarFromList;
+    private CarPart _selectedCarPart;
     private MarketGenerator _clientList;
     private CarService _carService;
     private Storage _storage;
@@ -29,6 +32,7 @@ public class Menu
         _storage = storage;
         _menuIndexLower = 0;
         _menuObject = 0;
+        _carPartsIndex = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
         {"Start the Work", new (this.ShowCarList)},
@@ -68,7 +72,7 @@ public class Menu
             case CurrentMenu.PartList:
                 WriteLine($"{_clientList.Clients[_menuObject].CarBrand}");
                 WriteLine("Choose a part you want to replace:");
-                ShowMenu(_clientList.Clients[_menuObject].CarEquipment);
+                ShowCarPartMenu(_clientList.Clients[_menuObject].CarEquipment);
                 break;
             case CurrentMenu.StorageList:
                 WriteLine("Choose part to replace from storage:");
@@ -87,10 +91,20 @@ public class Menu
                 : $"{list[i]}");
         }
     }
+    
+    private void ShowCarPartMenu<T>(List<T> list)
+    {
+        _menuIndexUpper = list.Count;
+        for (int i = 0; i < _menuIndexUpper; i++)
+        {
+            WriteLine(_carPartsIndex == i 
+                ? $">>{list[i]}<<"
+                : $"{list[i]}");
+        }
+    }
 
     private void SwitchMenu(CurrentMenu position)
     {
-        //CurrentMenu menuPosition = position;
         ConsoleKeyInfo userInput = ReadKey();
         switch (userInput.Key)
         {
@@ -110,7 +124,7 @@ public class Menu
                         break;
                     
                     case CurrentMenu.CarList:
-                        ShowParticularCar(); //Should save selected car for later.
+                        ShowParticularCar(); 
                         run = false;
                         break;
                     
@@ -123,6 +137,25 @@ public class Menu
                         ReplaceCarPart();
                         break;
                 }
+                break;
+        }
+    }
+    private void SwitchCarPartMenu(CurrentMenu position)
+    {
+        ConsoleKeyInfo userInput = ReadKey();
+        switch (userInput.Key)
+        {
+            case ConsoleKey.UpArrow:
+                _carPartsIndex = (_carPartsIndex == 0) ? _menuIndexUpper - 1 : --_carPartsIndex;
+                break;
+            
+            case ConsoleKey.DownArrow:
+                _carPartsIndex = (_carPartsIndex == _menuIndexUpper - 1) ? _menuIndexLower : ++_carPartsIndex;
+                break;
+            
+            case ConsoleKey.Enter:
+                ShowStorage();
+                run = false;
                 break;
         }
     }
@@ -144,6 +177,7 @@ public class Menu
     {
         run = true;
         _selectedPart = _menuObject;
+        _selectedCarPart = _selectedCarFromList.CarEquipment[_menuObject];
         _menuObject = 0;
         while (run)
         {
@@ -155,12 +189,12 @@ public class Menu
     private void ShowParticularCar() //Enter key
     {
         _selectedCar = _menuObject;
-        _menuObject = 0;
+        _selectedCarFromList = _clientList.Clients[_menuObject];
         run = true;
         while (run)
         {
             MenuHandler(CurrentMenu.PartList);
-            SwitchMenu(CurrentMenu.PartList); 
+            SwitchCarPartMenu(CurrentMenu.PartList); 
         }
         
         
@@ -178,18 +212,20 @@ public class Menu
         }
         
     }
-
     private void ReplaceCarPart()
     {
         _selectedStoragePart = _menuObject;
         _carService.PerformJob(_clientList.Clients[_selectedCar], _selectedPart, _storage, _selectedStoragePart);
         WriteLine("Part have been replaced!");
+        run = false;
+        Thread.Sleep(2000);
     }
 
     private void ShowMyStorage()
     {
         ClearConsole();
         WriteLine("Showing the storage!");
+        _storage.ShowStorage();
         Thread.Sleep(2000);
     }
 

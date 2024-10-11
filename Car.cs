@@ -10,7 +10,11 @@ public class Car : IMoneyUser, IListAsMenu
     private List<CarPart> _carEquipment;
     private int _money;
 
-    public string CarBrand { get; }
+    public string CarBrand
+    {
+        get { return _carBrand; }
+
+    }
     public List<CarPart> CarEquipment
     {
         get => _carEquipment;
@@ -53,5 +57,4 @@ public class Car : IMoneyUser, IListAsMenu
         //foreach (var part in _carEquipment) sb.Append($"{part}\n");
         return sb.ToString();
     }
-    
 }

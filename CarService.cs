@@ -5,6 +5,7 @@ public class CarService : IMoneyUser
     private int _money;
     private Storage _stock;
     private List<Car> _clients;
+    private List<CarPart> _storage;
     public int Money
     {
         get => _money;
@@ -17,12 +18,8 @@ public class CarService : IMoneyUser
     }
     public void PerformJob(Car car,int part,Storage storage, int partFromStorage)
     {
-        car.CarEquipment.RemoveAt(part);
         car.CarEquipment.Insert(part,storage.GetPartFromStorage(partFromStorage));
+        car.CarEquipment.RemoveAt(part);
     }
 
-    public void GetClientCars(MarketGenerator street)
-    {
-        _clients = street.Clients;
-    }
 }

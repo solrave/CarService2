@@ -10,22 +10,17 @@ public class CashDesk
     {
         _partPrices = new()
         {
-            {new CarPart("Wheel", false), 50},
-            {new CarPart("Engine Oil", false), 20}
-        };
-        _jobPrices = new()
-        {
-            {new ReplacePartJob("Wheel"), 25},
-            {new ReplacePartJob("Engine Oil"), 10}
+            { new CarPart("Wheel", false), 50 },
+            { new CarPart("Engine Oil", false), 20 }
         };
     }
 
     public void CalculateRepairCost()
     {
-        
+        int price = 0;
     }
     
-    public void MakeTransaction(IMoneyUser sender, IMoneyUser receiver, ReplacePartJob job)
+    public void MakeTransaction(IMoneyUser sender, IMoneyUser receiver)
     {
         
     }
