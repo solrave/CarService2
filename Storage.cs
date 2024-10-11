@@ -5,11 +5,6 @@ namespace CarService2;
 public class Storage : IListAsMenu
 {
     private readonly List<CarPart> _stock;
-
-    public List<CarPart> Stock
-    {
-        get => _stock;
-    }
     public Storage()
     {
         _stock = new List<CarPart>()
@@ -23,6 +18,11 @@ public class Storage : IListAsMenu
             { new CarPart("Engine Oil", false)},
             { new CarPart("Wheel", false)}
         };
+    }
+    
+    public List<CarPart> Stock
+    {
+        get => _stock;
     }
 
     public CarPart GetPartFromStorage(int part)
@@ -46,11 +46,8 @@ public class Storage : IListAsMenu
 
         return counter;
     }
-
-    public void ShowStorage()
+    public override string ToString()
     {
-        WriteLine("Part/Price:");
-        foreach (var part in _stock) WriteLine($"{part}, Pcs: {GetPartQuantity(part.Name)}");
-        WriteLine($"Total pcs: {GetStorageQuantity()}");
+        return base.ToString();
     }
 }

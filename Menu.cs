@@ -8,31 +8,30 @@ enum CurrentMenu
 public class Menu
 {
     private delegate void MenuAction();
-    private List<string> _mainMenu;
-    private Dictionary<string, MenuAction> _menuActions;
-    private int _menuIndexLower;
-    private int _menuIndexUpper;
-    private int _menuObject;
-    private int _selectedCar;
-    private int _selectedPart;
-    private int _selectedStoragePart;
-    private int _carPartsIndex;
-    private Car _selectedCarFromList;
-    private CarPart _selectedCarPart;
-    private MarketGenerator _clientList;
+    private List<string> _mainMenu; //Названия пунктов главного меню. Главное меню.
+    private Dictionary<string, MenuAction> _menuActions; //Список делегатов вызываемых при выборе одного из пунктов главного меню.
+    private int _menuIndexLower; //Нижний индекс меню, всегда равен нулю. 0
+    private int _menuIndexUpper; //Верхний индекс меню равен длине текущего списка из которого выбираешь.
+    private int _currentMenuIndex; // Текущий индекс меню, или тот который выбран.
+    private int _selectedCar; //Номер машины в списке, которую выбрал. Та машина которую чиним.
+    private int _selectedCarPart; //Номер запчасти в списке, которую выбрал. Та запчасть которую меняем.
+    private int _selectedPartFromStorage; //Номер запчасти из списка склада. Та запчасть которую берем для ремонта.
+    private int _carPartsIndex; //
+    //private Car _selectedCarFromList;
+    //private CarPart _selectedCarPart;
     private CarService _carService;
-    private Storage _storage;
     private Car CarToRepair;
     private bool run;
-    public Menu(MarketGenerator street, CarService carService, Storage storage)
+    public Menu(MarketGenerator street, CarService carService)
     {
         _mainMenu = new() { { "Start the Work" }, { "Show the Storage" }, { "Exit the Program" } };
-        _clientList = street;
         _carService = carService;
-        _storage = storage;
         _menuIndexLower = 0;
-        _menuObject = 0;
+        _currentMenuIndex = 0;
         _carPartsIndex = 0;
+        _selectedCar = 0;
+        _selectedCarPart = 0;
+        _selectedPartFromStorage = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
         {"Start the Work", new (this.ShowCarList)},
@@ -67,16 +66,16 @@ public class Menu
                 break;
             case CurrentMenu.CarList:
                 WriteLine("These are your clients for today:");
-                ShowMenu(_clientList.Clients);
+                ShowMenu(_carService.Clients.Clients);
                 break;
             case CurrentMenu.PartList:
-                WriteLine($"{_clientList.Clients[_menuObject].CarBrand}");
+                WriteLine($"{_carService.Clients.Clients[_currentMenuIndex].CarBrand}");
                 WriteLine("Choose a part you want to replace:");
-                ShowCarPartMenu(_clientList.Clients[_menuObject].CarEquipment);
+                ShowCarPartMenu(_carService.Clients.Clients[_currentMenuIndex].CarEquipment);
                 break;
             case CurrentMenu.StorageList:
                 WriteLine("Choose part to replace from storage:");
-                ShowMenu(_storage.Stock);
+                ShowMenu(_carService.Storage.Stock);
                 break;
         }
     }
@@ -86,7 +85,7 @@ public class Menu
         _menuIndexUpper = list.Count;
         for (int i = 0; i < _menuIndexUpper; i++)
         {
-            WriteLine(_menuObject == i 
+            WriteLine(_currentMenuIndex == i 
                 ? $">>{list[i]}<<"
                 : $"{list[i]}");
         }
@@ -109,11 +108,11 @@ public class Menu
         switch (userInput.Key)
         {
             case ConsoleKey.UpArrow:
-                _menuObject = (_menuObject == 0) ? _menuIndexUpper - 1 : --_menuObject;
+                _currentMenuIndex = (_currentMenuIndex == 0) ? _menuIndexUpper - 1 : --_currentMenuIndex;
                 break;
             
             case ConsoleKey.DownArrow:
-                _menuObject = (_menuObject == _menuIndexUpper - 1) ? _menuIndexLower : ++_menuObject;
+                _currentMenuIndex = (_currentMenuIndex == _menuIndexUpper - 1) ? _menuIndexLower : ++_currentMenuIndex;
                 break;
             
             case ConsoleKey.Enter:
@@ -124,23 +123,22 @@ public class Menu
                         break;
                     
                     case CurrentMenu.CarList:
+                        _selectedCar = _currentMenuIndex;
+                        _currentMenuIndex = 0;
                         ShowParticularCar(); 
                         run = false;
                         break;
                     
-                    case CurrentMenu.PartList:
-                        ShowStorage();
-                        run = false;
-                        break;
-                    
                     case CurrentMenu.StorageList:
+                        _selectedPartFromStorage = _currentMenuIndex;
+                        _currentMenuIndex = 0;
                         ReplaceCarPart();
                         break;
                 }
                 break;
         }
     }
-    private void SwitchCarPartMenu(CurrentMenu position)
+    private void SwitchCarPartMenu()
     {
         ConsoleKeyInfo userInput = ReadKey();
         switch (userInput.Key)
@@ -154,15 +152,17 @@ public class Menu
                 break;
             
             case ConsoleKey.Enter:
+                _selectedCarPart = _carPartsIndex;
+                _currentMenuIndex = 0;
                 ShowStorage();
                 run = false;
                 break;
         }
     }
 
-    private void MainMenuAction() //Enter key
+    private void MainMenuAction()
     {
-        string chosenMenuIndex = _mainMenu[_menuObject];
+        string chosenMenuIndex = _mainMenu[_currentMenuIndex];
         if (_menuActions.TryGetValue(chosenMenuIndex.ToString(), out MenuAction action))
         {
             action.Invoke();
@@ -173,12 +173,12 @@ public class Menu
         }  
     }
     
-    private void ShowStorage() //Enter key
+    private void ShowStorage() 
     {
         run = true;
-        _selectedPart = _menuObject;
-        _selectedCarPart = _selectedCarFromList.CarEquipment[_menuObject];
-        _menuObject = 0;
+        _selectedCarPart = _carPartsIndex;
+        //_selectedCarPart = _selectedCarFromList.CarEquipment[_currentMenuIndex];
+        _currentMenuIndex = 0;
         while (run)
         {
             MenuHandler(CurrentMenu.StorageList);
@@ -186,21 +186,19 @@ public class Menu
         }
     }
 
-    private void ShowParticularCar() //Enter key
+    private void ShowParticularCar()
     {
-        _selectedCar = _menuObject;
-        _selectedCarFromList = _clientList.Clients[_menuObject];
         run = true;
         while (run)
         {
             MenuHandler(CurrentMenu.PartList);
-            SwitchCarPartMenu(CurrentMenu.PartList); 
+            SwitchCarPartMenu(); 
         }
         
         
         
     }
-    private void ShowCarList() //Invoke from delegates list
+    private void ShowCarList()
     {
         run = true;
         while (run)
@@ -214,9 +212,8 @@ public class Menu
     }
     private void ReplaceCarPart()
     {
-        _selectedStoragePart = _menuObject;
-        _carService.PerformJob(_clientList.Clients[_selectedCar], _selectedPart, _storage, _selectedStoragePart);
-        WriteLine("Part have been replaced!");
+        ClearConsole();
+        WriteLine(_carService.PerformJob(_selectedCar, _selectedCarPart, _selectedPartFromStorage));
         run = false;
         Thread.Sleep(2000);
     }
@@ -225,7 +222,7 @@ public class Menu
     {
         ClearConsole();
         WriteLine("Showing the storage!");
-        _storage.ShowStorage();
+        WriteLine(_carService.Storage.Stock);
         Thread.Sleep(2000);
     }
 
