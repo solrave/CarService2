@@ -64,9 +64,9 @@ public class Menu
                 ShowMenu(_carService.Clients.Clients);
                 break;
             case CurrentMenu.PartList:
-                WriteLine($"{_carService.Clients.Clients[_currentMenuIndex].CarBrand}");
+                WriteLine($"{_selectedCar.CarBrand}");
                 WriteLine("Choose a part you want to replace:");
-                ShowCarPartMenu(_carService.Clients.Clients[_currentMenuIndex].CarEquipment);
+                ShowMenu(_selectedCar.CarEquipment);
                 break;
             case CurrentMenu.StorageList:
                 WriteLine("Choose part to replace from storage:");
@@ -121,6 +121,13 @@ public class Menu
                         _selectedCar = _carService.Clients.Clients[_currentMenuIndex];
                         _currentMenuIndex = 0;
                         ShowParticularCar(); 
+                        run = false;
+                        break;
+                    
+                    case CurrentMenu.PartList:
+                        _selectedCarPart = _selectedCar.CarEquipment[_carPartsIndex];
+                        _currentMenuIndex = 0;
+                        ShowStorage();
                         run = false;
                         break;
                     
@@ -186,7 +193,7 @@ public class Menu
         while (run)
         {
             MenuHandler(CurrentMenu.PartList);
-            SwitchCarPartMenu(); 
+            SwitchMenu(CurrentMenu.PartList); 
         }
         
         
@@ -207,7 +214,7 @@ public class Menu
     private void ReplaceCarPart()
     {
         ClearConsole();
-        //replace part
+        WriteLine(_carService.Job.PerformJob(_selectedCar,_selectedCarPart,_selectedPartFromStorage));
         run = false;
         Thread.Sleep(2000);
     }
@@ -216,7 +223,6 @@ public class Menu
     {
         ClearConsole();
         WriteLine("Showing the storage!");
-        WriteLine(_carService.Storage.Stock);
         Thread.Sleep(2000);
     }
 

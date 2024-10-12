@@ -2,22 +2,10 @@ namespace CarService2;
 
 public class JobParentClass
 {
-    private CarPart _carPart, _storagePart;
-    private MarketGenerator _clients;
-    private Storage _storage;
-    private CashDesk _cashDesk;
-
-    public JobParentClass(MarketGenerator clients, Storage storage, CashDesk cashDesk)
+    public JobParentClass()
     {
-        _clients = clients;
-        _storage = storage;
-        _cashDesk = cashDesk;
+     
     }
-
-    public MarketGenerator Clients => _clients;
-    public Storage Storage => _storage;
-    public CashDesk CashDesk => _cashDesk;
-
     public virtual string PerformJob(Car car, CarPart carPart, CarPart PartFromStorage)
     {
         string message;

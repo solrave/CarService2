@@ -1,12 +1,12 @@
 namespace CarService2;
 
-public class ReplaceWheelJob : JobParentClass
+public class ReplaceOilJob : JobParentClass
 {
-    public ReplaceWheelJob()
+    public ReplaceOilJob()
     {
         
     }
-
+    
     public override string PerformJob(Car car, CarPart carPart, CarPart PartFromStorage)
     {
         string message;
@@ -15,14 +15,14 @@ public class ReplaceWheelJob : JobParentClass
         if (carPart.Name == "Wheel" && carPart.Name == PartFromStorage.Name && carPart.IsBrokenStat)
         {
             message = "Part replaced successfully!";
-            //reward logic PartPrice == WheelPrice, JobPrice == WheelReplacementPrice
-            car.Money -= 150;
+            //reward logic OIL!!!!!!!
         }
         else
         {
             message = "You replaced a wrong part!";
-            //penalty logic
+            //penalty logic OIL!!!!!!
         }
         return message;
     }
+    
 }
