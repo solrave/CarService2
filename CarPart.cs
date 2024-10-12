@@ -1,6 +1,6 @@
 namespace CarService2;
 
-public class CarPart : IListAsMenu
+public class CarPart
 
 {
     private readonly string _name;

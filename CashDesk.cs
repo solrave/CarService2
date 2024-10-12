@@ -1,20 +1,31 @@
 namespace CarService2;
 
-public class CashDesk
+public class CashDesk : IMoneyUser
 {
     private int _money;
-    private readonly Dictionary<CarPart, int> _partPrices;
-    private readonly Dictionary<IPerformJob, int> _jobPrices;
+    private readonly Dictionary<string, int> _partPrices;
+    private readonly Dictionary<string, int> _jobPrices;
 
     public CashDesk()
     {
-        _partPrices = new()
+        _partPrices = new Dictionary<string, int>()
         {
-            { new CarPart("Wheel", false), 50 },
-            { new CarPart("Engine Oil", false), 20 }
+            { "Wheel", 50 },
+            { "Engine Oil", 20 }
         };
     }
 
+    public int Money
+    {
+        get
+        {
+            return _money;
+        }
+        set
+        {
+            _money = value;
+        }
+    }
     public void CalculateRepairCost()
     {
         int price = 0;

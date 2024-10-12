@@ -13,6 +13,10 @@
       </Compile>
       <Compile Remove="Program.cs" />
       <Compile Remove="ReplacePartlJob.cs" />
+      <Compile Remove="IPerformJob.cs" />
+      <Compile Remove="IPriceableEntity.cs" />
+      <Compile Remove="IListAsMenu.cs" />
+      <Compile Remove="Price.cs" />
     </ItemGroup>
 
 </Project>

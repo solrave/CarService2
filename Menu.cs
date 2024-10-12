@@ -22,7 +22,7 @@ public class Menu
     private CarService _carService;
     private Car CarToRepair;
     private bool run;
-    public Menu(MarketGenerator street, CarService carService)
+    public Menu(CarService carService)
     {
         _mainMenu = new() { { "Start the Work" }, { "Show the Storage" }, { "Exit the Program" } };
         _carService = carService;

@@ -2,7 +2,7 @@ using static System.Console;
 
 namespace CarService2;
 
-public class Storage : IListAsMenu
+public class Storage
 {
     private readonly List<CarPart> _stock;
     public Storage()

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarService2;
 
-public class Car : IMoneyUser, IListAsMenu
+public class Car : IMoneyUser
 {
     private readonly string _carBrand;
     private List<CarPart> _carEquipment;
