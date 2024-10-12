@@ -14,23 +14,48 @@ public class JobParentClass
         _cashDesk = cashDesk;
     }
 
-    public virtual string PerformJob(int car,int part, int partFromStorage)
+    public MarketGenerator Clients => _clients;
+    public Storage Storage => _storage;
+    public CashDesk CashDesk => _cashDesk;
+
+    public virtual string PerformJob(Car car, CarPart carPart, CarPart PartFromStorage)
     {
         string message;
-        if (_clients.Clients[car].CarEquipment[part].IsBrokenStat && _clients.Clients[car].CarEquipment[part].Name == _storage.Stock[partFromStorage].Name)
+        car.CarEquipment.Remove(carPart);
+        car.CarEquipment.Add(PartFromStorage);
+        if (carPart.Name == PartFromStorage.Name && carPart.IsBrokenStat)
         {
-            _clients.Clients[car].CarEquipment.RemoveAt(part);
-            _clients.Clients[car].CarEquipment.Add(_storage.Stock[partFromStorage]);
-            message = "Part was replaced successfully!";
-            //get reward
+            message = "Part replaced successfully!";
         }
         else
         {
-            message = "You replaced a wrong part!"; 
-            //penalty
+            message = "You replaced a wrong part!";
+        }
+        return message;
         }
 
-        return message;
-    }
+    #region OldMethodPerformJob
+    /*public virtual string PerformJob(int car,int part, int partFromStorage)
+       {
+           string message;
+           if (_clients.Clients[car].CarEquipment[part].IsBrokenStat && _clients.Clients[car].CarEquipment[part].Name == _storage.Stock[partFromStorage].Name)
+           {
+               _clients.Clients[car].CarEquipment.RemoveAt(part);
+               _clients.Clients[car].CarEquipment.Add(_storage.Stock[partFromStorage]);
+               message = "Part was replaced successfully!";
+               //get reward
+           }
+           else
+           {
+               message = "You replaced a wrong part!";
+               //penalty
+           }
+
+           return message;
+       }*/
+    
+
+    #endregion
+   
 
 }

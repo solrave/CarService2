@@ -13,12 +13,10 @@ public class Menu
     private int _menuIndexLower; //Нижний индекс меню, всегда равен нулю. 0
     private int _menuIndexUpper; //Верхний индекс меню равен длине текущего списка из которого выбираешь.
     private int _currentMenuIndex; // Текущий индекс меню, или тот который выбран.
-    private int _selectedCar; //Номер машины в списке, которую выбрал. Та машина которую чиним.
-    private int _selectedCarPart; //Номер запчасти в списке, которую выбрал. Та запчасть которую меняем.
-    private int _selectedPartFromStorage; //Номер запчасти из списка склада. Та запчасть которую берем для ремонта.
-    private int _carPartsIndex; //
-    //private Car _selectedCarFromList;
-    //private CarPart _selectedCarPart;
+    private int _carPartsIndex; //Индекс меню при выборе запчасти в конкретной машине.
+    private Car _selectedCar; //Выбранная для ремонта машина записана здесь
+    private CarPart _selectedCarPart;//Выбранная для ремонта запчасть записана здесь
+    private CarPart _selectedPartFromStorage; //Запчасть из списка склада. Та запчасть которую берем для ремонта.
     private CarService _carService;
     private Car CarToRepair;
     private bool run;
@@ -29,9 +27,6 @@ public class Menu
         _menuIndexLower = 0;
         _currentMenuIndex = 0;
         _carPartsIndex = 0;
-        _selectedCar = 0;
-        _selectedCarPart = 0;
-        _selectedPartFromStorage = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
         {"Start the Work", new (this.ShowCarList)},
@@ -123,14 +118,14 @@ public class Menu
                         break;
                     
                     case CurrentMenu.CarList:
-                        _selectedCar = _currentMenuIndex;
+                        _selectedCar = _carService.Clients.Clients[_currentMenuIndex];
                         _currentMenuIndex = 0;
                         ShowParticularCar(); 
                         run = false;
                         break;
                     
                     case CurrentMenu.StorageList:
-                        _selectedPartFromStorage = _currentMenuIndex;
+                        _selectedPartFromStorage = _carService.Storage.Stock[_currentMenuIndex];
                         _currentMenuIndex = 0;
                         ReplaceCarPart();
                         break;
@@ -152,7 +147,7 @@ public class Menu
                 break;
             
             case ConsoleKey.Enter:
-                _selectedCarPart = _carPartsIndex;
+                _selectedCarPart = _selectedCar.CarEquipment[_carPartsIndex];
                 _currentMenuIndex = 0;
                 ShowStorage();
                 run = false;
@@ -176,7 +171,7 @@ public class Menu
     private void ShowStorage() 
     {
         run = true;
-        _selectedCarPart = _carPartsIndex;
+        //_selectedCarPart = _carPartsIndex;
         _currentMenuIndex = 0;
         while (run)
         {
@@ -212,7 +207,7 @@ public class Menu
     private void ReplaceCarPart()
     {
         ClearConsole();
-        WriteLine(_carService.PerformJob(_selectedCar, _selectedCarPart, _selectedPartFromStorage));
+        //replace part
         run = false;
         Thread.Sleep(2000);
     }
