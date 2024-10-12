@@ -177,7 +177,6 @@ public class Menu
     {
         run = true;
         _selectedCarPart = _carPartsIndex;
-        //_selectedCarPart = _selectedCarFromList.CarEquipment[_currentMenuIndex];
         _currentMenuIndex = 0;
         while (run)
         {

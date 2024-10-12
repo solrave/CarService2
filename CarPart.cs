@@ -11,11 +11,6 @@ public class CarPart
         _name = name;
         _isBroken = isBroken;
     }
-    public bool IsBrokenStat
-    {
-        get { return _isBroken; }
-    }
-
     public CarPart(string name)
     {
         _name = name;
@@ -24,6 +19,10 @@ public class CarPart
         {
             _isBroken = true;
         }
+    }
+    public bool IsBrokenStat
+    {
+        get { return _isBroken; }
     }
     public string Name
     {

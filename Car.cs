@@ -31,11 +31,11 @@ public class Car : IMoneyUser
         _money = 500;
         _carBrand = AssignRandomCarBrand(); //Назначается случайная марка авто.
         _carEquipment = new List<CarPart>();
-        _carEquipment.Add(new CarPart("Wheel"));
-        _carEquipment.Add(new CarPart("Wheel"));
-        _carEquipment.Add(new CarPart("Wheel"));
-        _carEquipment.Add(new CarPart("Wheel"));
-        _carEquipment.Add(new CarPart("Engine Oil"));
+        _carEquipment.Add(new Wheel("Wheel"));
+        _carEquipment.Add(new Wheel("Wheel"));
+        _carEquipment.Add(new Wheel("Wheel"));
+        _carEquipment.Add(new Wheel("Wheel"));
+        _carEquipment.Add(new EngineOil("Engine Oil"));
     }
 
     private string AssignRandomCarBrand() //Назначается случайная марка авто.
