@@ -1,36 +1,25 @@
 namespace CarService2;
 
 public class CarPart
-
 {
     private readonly string _name;
     private readonly bool _isBroken;
-
+    public bool IsBroken { get; protected init; }
+    public string Name { get; protected init; }
+    protected CarPart()
+    {
+       
+    }
+    
     public CarPart(string name, bool isBroken)
     {
-        _name = name;
-        _isBroken = isBroken;
+        Name = name;
+        IsBroken = isBroken;
     }
-    public CarPart(string name)
-    {
-        _name = name;
-        Random randomizeBreak = new Random();
-        if (randomizeBreak.Next(0, 11) % 2 == 0)
-        {
-            _isBroken = true;
-        }
-    }
-    public bool IsBrokenStat
-    {
-        get { return _isBroken; }
-    }
-    public string Name
-    {
-        get => _name;
-    }
+    
 
     public override string ToString()
     {
-        return $"Part name: {Name}, Broken: {IsBrokenStat} ";
+        return $"Part name: {Name}, Broken: {IsBroken} ";
     }
 }

@@ -2,16 +2,15 @@ namespace CarService2;
 
 public class JobParentClass
 {
-    public JobParentClass()
+    protected JobParentClass()
     {
-     
     }
-    public virtual string PerformJob(Car car, CarPart carPart, CarPart PartFromStorage)
+    public virtual string PerformJob(Car car, CarPart carPart, CarPart partFromStorage)
     {
         string message;
         car.CarEquipment.Remove(carPart);
-        car.CarEquipment.Add(PartFromStorage);
-        if (carPart.Name == PartFromStorage.Name && carPart.IsBrokenStat)
+        car.CarEquipment.Add(partFromStorage);
+        if (carPart.Name == partFromStorage.Name && carPart.IsBroken)
         {
             message = "Part replaced successfully!";
         }

@@ -12,7 +12,7 @@ public class ReplaceOilJob : JobParentClass
         string message;
         car.CarEquipment.Remove(carPart);
         car.CarEquipment.Add(PartFromStorage); 
-        if (carPart.Name == "Wheel" && carPart.Name == PartFromStorage.Name && carPart.IsBrokenStat)
+        if (carPart.Name == "Wheel" && carPart.Name == PartFromStorage.Name && carPart.IsBroken)
         {
             message = "Part replaced successfully!";
             //reward logic OIL!!!!!!!

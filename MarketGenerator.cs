@@ -4,27 +4,21 @@ namespace CarService2;
 
 public class MarketGenerator//Здесь создаётся список поломанных машин для передачи его в Автосервис.
 {
-    private List<Car> _clients;
-
-    public List<Car> Clients
-    {
-        get => _clients;
-        set => _clients = value;
-    }
+    public List<Car> Clients { get; private set; }
 
     public MarketGenerator()
     {
         CreateSomeCars();
     }
 
-    private void CreateSomeCars()
+    private void CreateSomeCars() //создать пять машин
     {
-        _clients = new List<Car>();
-        for (var i = 0; i < 5; i++) _clients.Add(new Car());
+        Clients = new List<Car>();
+        for (var i = 0; i < 5; i++) Clients.Add(new Car());
     }
     
     public void ShowClientQueue()
     {
-        foreach (var car in _clients) WriteLine(car);
+        foreach (var car in Clients) WriteLine(car);
     }
 }

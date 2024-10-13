@@ -2,33 +2,33 @@ namespace CarService2;
 
 public class CashDesk : IMoneyUser
 {
-    private int _money;
-    private readonly Dictionary<string, int> _partPrices;
-    private readonly Dictionary<string, int> _jobPrices;
+    private readonly Dictionary<CarPart, int> _partPrices;
+    private readonly Dictionary<JobParentClass, int> _jobPrices;
 
     public CashDesk()
     {
-        _partPrices = new Dictionary<string, int>()
+        _partPrices = new Dictionary<CarPart, int>()
         {
-            { "Wheel", 50 },
-            { "Engine Oil", 20 }
+            { new Wheel("Pirelli", false), 50 },
+            { new EngineOil("Motul", false), 20 }
+        };
+        _jobPrices = new Dictionary<JobParentClass, int>()
+        {
+            { new ReplaceWheelJob(), 100 },
+            { new ReplaceOilJob(), 40 }
         };
     }
 
-    public int Money
+    public int Money { get; set; }
+    public Dictionary<CarPart,string> PartPrices { get; }
+    public Dictionary<JobParentClass, int> JobPrices { get; }
+
+    public static void CalculateRepairCost()
     {
-        get
-        {
-            return _money;
-        }
-        set
-        {
-            _money = value;
-        }
-    }
-    public void CalculateRepairCost()
-    {
-        int price = 0;
+       // int totalPrice, partPrice, jobPrice;
+        
+
+       // return totalPrice;
     }
     
     public void MakeTransaction(IMoneyUser sender, IMoneyUser receiver)

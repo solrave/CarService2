@@ -2,26 +2,25 @@ namespace CarService2;
 using static System.Console;
 public class CarService : IMoneyUser
 {
-    private int _money;
-    private Storage _stock;
-    private MarketGenerator _clients;
-    private ReplaceWheelJob _job;
-    public CarService(int money, MarketGenerator clients, ReplaceWheelJob job)
+    public CarService(int money, MarketGenerator clients, ReplaceWheelJob wheelJob, ReplaceOilJob oilJob, CashDesk cashDesk)
     {
-        _money = money;
-        _stock = new Storage();
-        _clients = clients;
-        _job = job;
+        Money = money;
+        Storage = new Storage();
+        Clients = clients;
+        WheelJob = wheelJob;
+        OilJob = oilJob;
+        CashDesk = cashDesk;
     }
 
-    public Storage Storage => _stock;
-    public MarketGenerator Clients => _clients;
+    public Storage Storage { get; }
 
-    public ReplaceWheelJob Job => _job;
+    public MarketGenerator Clients { get; }
+
+    public ReplaceWheelJob WheelJob { get; }
     
-    public int Money
-    {
-        get => _money;
-        set => _money = value;
-    }
+    public ReplaceOilJob OilJob { get; }
+    
+    public CashDesk CashDesk { get; }
+
+    public int Money { get; set; }
 }

@@ -85,18 +85,6 @@ public class Menu
                 : $"{list[i]}");
         }
     }
-    
-    private void ShowCarPartMenu<T>(List<T> list)
-    {
-        _menuIndexUpper = list.Count;
-        for (int i = 0; i < _menuIndexUpper; i++)
-        {
-            WriteLine(_carPartsIndex == i 
-                ? $">>{list[i]}<<"
-                : $"{list[i]}");
-        }
-    }
-
     private void SwitchMenu(CurrentMenu position)
     {
         ConsoleKeyInfo userInput = ReadKey();
@@ -140,28 +128,6 @@ public class Menu
                 break;
         }
     }
-    private void SwitchCarPartMenu()
-    {
-        ConsoleKeyInfo userInput = ReadKey();
-        switch (userInput.Key)
-        {
-            case ConsoleKey.UpArrow:
-                _carPartsIndex = (_carPartsIndex == 0) ? _menuIndexUpper - 1 : --_carPartsIndex;
-                break;
-            
-            case ConsoleKey.DownArrow:
-                _carPartsIndex = (_carPartsIndex == _menuIndexUpper - 1) ? _menuIndexLower : ++_carPartsIndex;
-                break;
-            
-            case ConsoleKey.Enter:
-                _selectedCarPart = _selectedCar.CarEquipment[_carPartsIndex];
-                _currentMenuIndex = 0;
-                ShowStorage();
-                run = false;
-                break;
-        }
-    }
-
     private void MainMenuAction()
     {
         string chosenMenuIndex = _mainMenu[_currentMenuIndex];
@@ -214,7 +180,7 @@ public class Menu
     private void ReplaceCarPart()
     {
         ClearConsole();
-        WriteLine(_carService.Job.PerformJob(_selectedCar,_selectedCarPart,_selectedPartFromStorage));
+        WriteLine(_carService.WheelJob.PerformJob(_selectedCar,_selectedCarPart,_selectedPartFromStorage));
         run = false;
         Thread.Sleep(2000);
     }

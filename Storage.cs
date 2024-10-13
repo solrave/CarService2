@@ -9,14 +9,14 @@ public class Storage
     {
         _stock = new List<CarPart>()
         {
-            { new CarPart("Wheel", false)},
-            { new CarPart("Wheel", false)},
-            { new CarPart("Wheel", false)},
-            { new CarPart("Wheel", false)},
-            { new CarPart("Wheel", false)},
-            { new CarPart("Wheel", false)},
-            { new CarPart("Engine Oil", false)},
-            { new CarPart("Wheel", false)}
+            { new Wheel("Pirelli", false)},
+            { new Wheel("Pirelli", false)},
+            { new Wheel("GoodYear", false)},
+            { new Wheel("GoodYear", false)},
+            { new Wheel("GoodYear", false)},
+            { new Wheel("GoodYear", false)},
+            { new EngineOil("Motul", false)},
+            { new Wheel("Pirelli", false)}
         };
     }
     
