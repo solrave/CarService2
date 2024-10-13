@@ -7,20 +7,20 @@ public class ReplaceOilJob : JobParentClass
         
     }
     
-    public override string PerformJob(Car car, CarPart carPart, CarPart PartFromStorage)
+    public override string PerformJob(Car car, CarPart carPart, CarPart partFromStorage)
     {
         string message;
         car.CarEquipment.Remove(carPart);
-        car.CarEquipment.Add(PartFromStorage); 
-        if (carPart.Name == "Wheel" && carPart.Name == PartFromStorage.Name && carPart.IsBroken)
+        car.CarEquipment.Add(partFromStorage); 
+        if (carPart.IsBroken && carPart.GetType() == partFromStorage.GetType())
         {
-            message = "Part replaced successfully!";
-            //reward logic OIL!!!!!!!
+            message = "OIL replaced successfully!"; 
+            //reward
         }
         else
         {
-            message = "You replaced a wrong part!";
-            //penalty logic OIL!!!!!!
+            message = "WRONG part replaced!";
+            //penalty
         }
         return message;
     }

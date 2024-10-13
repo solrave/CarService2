@@ -26,7 +26,7 @@ public class Menu
         _carService = carService;
         _menuIndexLower = 0;
         _currentMenuIndex = 0;
-        _carPartsIndex = 0;
+        //_carPartsIndex = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
         {"Start the Work", new (this.ShowCarList)},
@@ -113,7 +113,7 @@ public class Menu
                         break;
                     
                     case CurrentMenu.PartList:
-                        _selectedCarPart = _selectedCar.CarEquipment[_carPartsIndex];
+                        _selectedCarPart = _selectedCar.CarEquipment[_currentMenuIndex];
                         _currentMenuIndex = 0;
                         ShowStorage();
                         run = false;
@@ -144,7 +144,6 @@ public class Menu
     private void ShowStorage() 
     {
         run = true;
-        //_selectedCarPart = _carPartsIndex;
         _currentMenuIndex = 0;
         while (run)
         {
@@ -180,7 +179,7 @@ public class Menu
     private void ReplaceCarPart()
     {
         ClearConsole();
-        WriteLine(_carService.WheelJob.PerformJob(_selectedCar,_selectedCarPart,_selectedPartFromStorage));
+        _carService.Vitya.StartService(_selectedCar,_selectedCarPart,_selectedPartFromStorage);
         run = false;
         Thread.Sleep(2000);
     }

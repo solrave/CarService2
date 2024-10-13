@@ -2,7 +2,7 @@ namespace CarService2;
 
 public class Wheel : CarPart
 {
-    private string[] _wheelNames = { "Pirelli", "GoodYear", "Sprinter", "Kama" };
+    private string[] _wheelNames = { "Pirelli", "GoodYear", "Sprinter"};
     public Wheel()
     {
         Random random = new Random();
