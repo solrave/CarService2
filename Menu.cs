@@ -13,12 +13,10 @@ public class Menu
     private int _menuIndexLower; //Нижний индекс меню, всегда равен нулю. 0
     private int _menuIndexUpper; //Верхний индекс меню равен длине текущего списка из которого выбираешь.
     private int _currentMenuIndex; // Текущий индекс меню, или тот который выбран.
-    private int _carPartsIndex; //Индекс меню при выборе запчасти в конкретной машине.
     private Car _selectedCar; //Выбранная для ремонта машина записана здесь
     private CarPart _selectedCarPart;//Выбранная для ремонта запчасть записана здесь
     private CarPart _selectedPartFromStorage; //Запчасть из списка склада. Та запчасть которую берем для ремонта.
     private CarService _carService;
-    private Car CarToRepair;
     private bool run;
     public Menu(CarService carService)
     {
@@ -26,7 +24,6 @@ public class Menu
         _carService = carService;
         _menuIndexLower = 0;
         _currentMenuIndex = 0;
-        //_carPartsIndex = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
         {"Start the Work", new (this.ShowCarList)},
@@ -40,15 +37,12 @@ public class Menu
         Clear();
         WriteLine("\x1b[3J");
     }
-
     public void RunMenu()
     {
         MenuHandler(CurrentMenu.MainMenu);
         SwitchMenu(CurrentMenu.MainMenu);
         
     }
-    
-    
     private void MenuHandler(CurrentMenu position)
     {
         ClearConsole();
@@ -74,7 +68,6 @@ public class Menu
                 break;
         }
     }
-
     private void ShowMenu<T>(List<T> list)
     {
         _menuIndexUpper = list.Count;
@@ -140,7 +133,6 @@ public class Menu
             WriteLine("Error! No such menu index!");
         }  
     }
-    
     private void ShowStorage() 
     {
         run = true;
@@ -151,7 +143,6 @@ public class Menu
             SwitchMenu(CurrentMenu.StorageList); 
         }
     }
-
     private void ShowParticularCar()
     {
         run = true;
@@ -160,9 +151,6 @@ public class Menu
             MenuHandler(CurrentMenu.PartList);
             SwitchMenu(CurrentMenu.PartList); 
         }
-        
-        
-        
     }
     private void ShowCarList()
     {
@@ -179,18 +167,23 @@ public class Menu
     private void ReplaceCarPart()
     {
         ClearConsole();
-        _carService.Vitya.StartService(_selectedCar,_selectedCarPart,_selectedPartFromStorage);
+        _carService.Vitya.StartService(_selectedCar, _selectedCarPart, _selectedPartFromStorage);
+        _carService.Vitya.GetJobMessage();
+        _carService.CashDesk.CalculateRepairCost(_selectedCarPart, _carService.Vitya.GetJobType());
+        if (_carService.Vitya.GetJobResult())
+        {
+            _carService.CashDesk.MakeTransaction(_selectedCar, _carService.CashDesk);
+        }
         run = false;
         Thread.Sleep(2000);
     }
-
     private void ShowMyStorage()
     {
         ClearConsole();
         WriteLine("Showing the storage!");
+        WriteLine(_carService.CashDesk.Money);
         Thread.Sleep(2000);
     }
-
     private void ExitProgram()
     {
         Environment.Exit(0);

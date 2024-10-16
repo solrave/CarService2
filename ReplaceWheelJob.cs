@@ -8,21 +8,27 @@ public class ReplaceWheelJob : JobParentClass
      
     }
     
-    public override string PerformJob(Car car, CarPart carPart, CarPart partFromStorage)
+    public override (string,string,bool) PerformJob(Car car, CarPart carPart, CarPart partFromStorage)
     {
+        string typeOfJob;
         string message;
+        bool done;
         car.CarEquipment.Remove(carPart);
         car.CarEquipment.Add(partFromStorage); 
         if (carPart.IsBroken && carPart.GetType() == partFromStorage.GetType())
         {
-            message = "WHEEL replaced successfully!"; 
+            typeOfJob = "Wheel";
+            message = "WHEEL replaced successfully!";
+            done = true;
             //reward
         }
         else
         {
+            typeOfJob = "Wheel";
             message = "WRONG part replaced!";
+            done = false;
             //penalty
         }
-        return message;
+        return (typeOfJob,message, done);
     }
 }

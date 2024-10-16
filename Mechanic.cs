@@ -7,8 +7,12 @@ public class Mechanic
     public ReplaceOilJob OilJob { get; }
     
     public Car Car { get; set; }
+    
     public CarPart CarPart { get; set; }
+    
     public CarPart PartFromStorage { get; set; }
+    
+    public (string,string, bool) Result { get; set; }
     
     public Mechanic()
     {
@@ -28,11 +32,28 @@ public class Mechanic
     {
         if (CarPart.GetType() == typeof(Wheel))
         {
-            WriteLine(WheelJob.PerformJob(Car, CarPart, PartFromStorage));
+           Result = WheelJob.PerformJob(Car, CarPart, PartFromStorage);
+           WriteLine(Result.Item1);
         }
         else if (CarPart.GetType() == typeof(EngineOil))
         {
-            WriteLine(OilJob.PerformJob(Car,CarPart,PartFromStorage));
+           Result = OilJob.PerformJob(Car,CarPart,PartFromStorage);
+           WriteLine(Result.Item1);
         }
+    }
+
+    public string GetJobType()
+    {
+        return Result.Item1;
+    }
+
+    public void GetJobMessage()
+    {
+        WriteLine(Result.Item2);
+    }
+
+    public bool GetJobResult()
+    {
+        return Result.Item3;
     }
 }
