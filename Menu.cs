@@ -41,7 +41,6 @@ public class Menu
     {
         MenuHandler(CurrentMenu.MainMenu);
         SwitchMenu(CurrentMenu.MainMenu);
-        
     }
     private void MenuHandler(CurrentMenu position)
     {
@@ -83,11 +82,11 @@ public class Menu
         ConsoleKeyInfo userInput = ReadKey();
         switch (userInput.Key)
         {
-            case ConsoleKey.UpArrow:
+            case ConsoleKey.UpArrow: //Нажимаем стрелочку вверх, меняем индекс и соответственно выбранное меню
                 _currentMenuIndex = (_currentMenuIndex == 0) ? _menuIndexUpper - 1 : --_currentMenuIndex;
                 break;
             
-            case ConsoleKey.DownArrow:
+            case ConsoleKey.DownArrow: //Нажимаем стрелочку вниз, меняем индекс и соответственно выбранное меню
                 _currentMenuIndex = (_currentMenuIndex == _menuIndexUpper - 1) ? _menuIndexLower : ++_currentMenuIndex;
                 break;
             
@@ -162,7 +161,6 @@ public class Menu
             WriteLine("Choose client to serve by pressing UP and DOWN arrows.");
             SwitchMenu(CurrentMenu.CarList);
         }
-        
     }
     private void ReplaceCarPart()
     {
@@ -173,6 +171,11 @@ public class Menu
         if (_carService.Vitya.GetJobResult())
         {
             _carService.CashDesk.MakeTransaction(_selectedCar, _carService.CashDesk);
+        }
+        else
+        {
+            _carService.CashDesk.CalculatePenaltyCost(_selectedCarPart, _carService.Vitya.GetJobType());
+            _carService.CashDesk.ApplyPenalty();
         }
         run = false;
         Thread.Sleep(2000);

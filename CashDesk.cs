@@ -29,13 +29,13 @@ public class CashDesk : IMoneyUser
 
     public void CalculateRepairCost(CarPart carPart, string typeOfJob)
     {
-        foreach (var part in _partPrices)
-        {
-            if (carPart.GetType() == part.Key.GetType())
-            {
-                partPrice = part.Value;
-            }
-        }
+        GetPartPrice(carPart);
+        GetJobPrice(typeOfJob);
+        totalPrice = partPrice + jobPrice;
+    }
+
+    private void GetJobPrice(string typeOfJob)
+    {
         foreach (var job in _jobPrices)
         {
             if (typeOfJob == job.Key)
@@ -43,17 +43,34 @@ public class CashDesk : IMoneyUser
                 jobPrice = job.Value;
             }
         }
-        totalPrice = partPrice + jobPrice;
     }
 
-    public static void CalculatePenaltyCost()
+    private void GetPartPrice(CarPart carPart)
     {
-        //(partPrice + workPrice) * 2 => penalty
+        foreach (var part in _partPrices)
+        {
+            if (carPart.GetType() == part.Key.GetType())
+            {
+                partPrice = part.Value;
+            }
+        }
+    }
+
+    public void CalculatePenaltyCost(CarPart carPart, string typeOfJob)
+    {
+        GetPartPrice(carPart);
+        GetJobPrice(typeOfJob);
+        totalPrice = (partPrice + jobPrice)* 2;
     }
     
     public void MakeTransaction(IMoneyUser sender, IMoneyUser receiver)
     {
         sender.Money -= totalPrice;
         receiver.Money += totalPrice;
+    }
+
+    public void ApplyPenalty()
+    {
+        Money -= totalPrice;
     }
 }
