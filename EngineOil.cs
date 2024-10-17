@@ -17,8 +17,6 @@ public class EngineOil : CarPart
     {
         
     }
-    
-    
     public override string ToString()
     {
         return $"Part name: {Name}, Broken: {IsBroken} ";

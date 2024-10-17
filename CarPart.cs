@@ -10,14 +10,11 @@ public class CarPart
     {
        
     }
-    
     public CarPart(string name, bool isBroken)
     {
         Name = name;
         IsBroken = isBroken;
     }
-    
-
     public override string ToString()
     {
         return $"Part name: {Name}, Broken: {IsBroken} ";

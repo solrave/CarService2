@@ -8,16 +8,16 @@ enum CurrentMenu
 public class Menu
 {
     private delegate void MenuAction();
-    private List<string> _mainMenu; //Названия пунктов главного меню. Главное меню.
+    private readonly List<string> _mainMenu; //Названия пунктов главного меню. Главное меню.
     private Dictionary<string, MenuAction> _menuActions; //Список делегатов вызываемых при выборе одного из пунктов главного меню.
-    private int _menuIndexLower; //Нижний индекс меню, всегда равен нулю. 0
+    private readonly int _menuIndexLower; //Нижний индекс меню, всегда равен нулю. 0
     private int _menuIndexUpper; //Верхний индекс меню равен длине текущего списка из которого выбираешь.
     private int _currentMenuIndex; // Текущий индекс меню, или тот который выбран.
     private Car _selectedCar; //Выбранная для ремонта машина записана здесь
     private CarPart _selectedCarPart;//Выбранная для ремонта запчасть записана здесь
     private CarPart _selectedPartFromStorage; //Запчасть из списка склада. Та запчасть которую берем для ремонта.
-    private CarService _carService;
-    private bool run;
+    private readonly CarService _carService;
+    private bool _run;
     public Menu(CarService carService)
     {
         _mainMenu = new() { { "Start the Work" }, { "Show the Storage" }, { "Exit the Program" } };
@@ -26,13 +26,13 @@ public class Menu
         _currentMenuIndex = 0;
         _menuActions = new Dictionary<string, MenuAction>
     {
-        {"Start the Work", new (this.ShowCarList)},
-        {"Show the Storage", new (this.ShowMyStorage)},
-        {"Exit the Program", new (this.ExitProgram)}
+        {"Start the Work", this.ShowCarList},
+        {"Show the Storage", this.ShowMyStorage},
+        {"Exit the Program", this.ExitProgram}
     };
     }
     
-    private void ClearConsole()
+    private static void ClearConsole()
     {
         Clear();
         WriteLine("\x1b[3J");
@@ -83,11 +83,11 @@ public class Menu
         switch (userInput.Key)
         {
             case ConsoleKey.UpArrow: //Нажимаем стрелочку вверх, меняем индекс и соответственно выбранное меню
-                _currentMenuIndex = (_currentMenuIndex == 0) ? _menuIndexUpper - 1 : --_currentMenuIndex;
+                SelectUpperMenuOption();
                 break;
             
             case ConsoleKey.DownArrow: //Нажимаем стрелочку вниз, меняем индекс и соответственно выбранное меню
-                _currentMenuIndex = (_currentMenuIndex == _menuIndexUpper - 1) ? _menuIndexLower : ++_currentMenuIndex;
+                SelectLowerMenuOption();
                 break;
             
             case ConsoleKey.Enter:
@@ -101,14 +101,14 @@ public class Menu
                         _selectedCar = _carService.Clients.Clients[_currentMenuIndex];
                         _currentMenuIndex = 0;
                         ShowParticularCar(); 
-                        run = false;
+                        _run = false;
                         break;
                     
                     case CurrentMenu.PartList:
-                        _selectedCarPart = _selectedCar.CarEquipment[_currentMenuIndex];
+                        _selectedCarPart = _selectedCar.CarEquipment[_currentMenuIndex]; 
                         _currentMenuIndex = 0;
                         ShowStorage();
-                        run = false;
+                        _run = false;
                         break;
                     
                     case CurrentMenu.StorageList:
@@ -119,6 +119,14 @@ public class Menu
                 }
                 break;
         }
+    }
+    private void SelectLowerMenuOption()
+    {
+        _currentMenuIndex = (_currentMenuIndex == _menuIndexUpper - 1) ? _menuIndexLower : ++_currentMenuIndex;
+    }
+    private void SelectUpperMenuOption()
+    {
+        _currentMenuIndex = (_currentMenuIndex == 0) ? _menuIndexUpper - 1 : --_currentMenuIndex;
     }
     private void MainMenuAction()
     {
@@ -134,9 +142,9 @@ public class Menu
     }
     private void ShowStorage() 
     {
-        run = true;
+        _run = true;
         _currentMenuIndex = 0;
-        while (run)
+        while (_run)
         {
             MenuHandler(CurrentMenu.StorageList);
             SwitchMenu(CurrentMenu.StorageList); 
@@ -144,8 +152,8 @@ public class Menu
     }
     private void ShowParticularCar()
     {
-        run = true;
-        while (run)
+        _run = true;
+        while (_run)
         {
             MenuHandler(CurrentMenu.PartList);
             SwitchMenu(CurrentMenu.PartList); 
@@ -153,8 +161,8 @@ public class Menu
     }
     private void ShowCarList()
     {
-        run = true;
-        while (run)
+        _run = true;
+        while (_run)
         {
             WriteLine("These are clients for today:");
             MenuHandler(CurrentMenu.CarList);
@@ -177,7 +185,7 @@ public class Menu
             _carService.CashDesk.CalculatePenaltyCost(_selectedCarPart, _carService.Vitya.GetJobType());
             _carService.CashDesk.ApplyPenalty();
         }
-        run = false;
+        _run = false;
         Thread.Sleep(2000);
     }
     private void ShowMyStorage()

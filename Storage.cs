@@ -4,50 +4,21 @@ namespace CarService2;
 
 public class Storage
 {
+    public List<CarPart> Stock => _stock;
     private readonly List<CarPart> _stock;
+
     public Storage()
     {
         _stock = new List<CarPart>()
         {
-            { new Wheel("Pirelli", false)},
-            { new Wheel("Pirelli", false)},
-            { new Wheel("GoodYear", false)},
-            { new Wheel("GoodYear", false)},
-            { new Wheel("GoodYear", false)},
-            { new Wheel("GoodYear", false)},
-            { new EngineOil("Motul", false)},
-            { new Wheel("Pirelli", false)}
+            { new Wheel("Pirelli", false) },
+            { new Wheel("Pirelli", false) },
+            { new Wheel("GoodYear", false) },
+            { new Wheel("GoodYear", false) },
+            { new Wheel("GoodYear", false) },
+            { new Wheel("GoodYear", false) },
+            { new EngineOil("Motul", false) },
+            { new Wheel("Pirelli", false) }
         };
-    }
-    
-    public List<CarPart> Stock
-    {
-        get => _stock;
-    }
-
-    public CarPart GetPartFromStorage(int part)
-    {
-        CarPart temp = Stock[part];
-        Stock.RemoveAt(part);
-        return temp;
-    }
-
-    public int GetStorageQuantity()
-    {
-        return _stock.Count;
-    }
-
-    public int GetPartQuantity(string name)
-    {
-        var counter = 0;
-        foreach (var part in _stock)
-            if (part.Name == name)
-                counter += 1;
-
-        return counter;
-    }
-    public override string ToString()
-    {
-        return base.ToString();
     }
 }

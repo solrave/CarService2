@@ -2,12 +2,14 @@ namespace CarService2;
 
 public class CashDesk : IMoneyUser
 {
+    public int Money { get; set; }
+    public Dictionary<CarPart,string> PartPrices { get; }
+    public Dictionary<string, int> JobPrices { get; }
     private readonly Dictionary<CarPart, int> _partPrices;
     private readonly Dictionary<string, int> _jobPrices;
     private int totalPrice = 0;
     private int partPrice = 0;
     private int jobPrice = 0;
-
     public CashDesk()
     {
         Money = 1000;
@@ -22,18 +24,12 @@ public class CashDesk : IMoneyUser
             { "Oil", 40 }
         };
     }
-
-    public int Money { get; set; }
-    public Dictionary<CarPart,string> PartPrices { get; }
-    public Dictionary<string, int> JobPrices { get; }
-
     public void CalculateRepairCost(CarPart carPart, string typeOfJob)
     {
         GetPartPrice(carPart);
         GetJobPrice(typeOfJob);
         totalPrice = partPrice + jobPrice;
     }
-
     private void GetJobPrice(string typeOfJob)
     {
         foreach (var job in _jobPrices)
@@ -44,7 +40,6 @@ public class CashDesk : IMoneyUser
             }
         }
     }
-
     private void GetPartPrice(CarPart carPart)
     {
         foreach (var part in _partPrices)
@@ -55,20 +50,17 @@ public class CashDesk : IMoneyUser
             }
         }
     }
-
     public void CalculatePenaltyCost(CarPart carPart, string typeOfJob)
     {
         GetPartPrice(carPart);
         GetJobPrice(typeOfJob);
         totalPrice = (partPrice + jobPrice)* 2;
     }
-    
     public void MakeTransaction(IMoneyUser sender, IMoneyUser receiver)
     {
         sender.Money -= totalPrice;
         receiver.Money += totalPrice;
     }
-
     public void ApplyPenalty()
     {
         Money -= totalPrice;

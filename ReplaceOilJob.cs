@@ -6,7 +6,6 @@ public class ReplaceOilJob : JobParentClass
     {
         
     }
-    
     public override (string,string,bool) PerformJob(Car car, CarPart carPart, CarPart partFromStorage)
     {
         string typeOfJob;
@@ -19,14 +18,12 @@ public class ReplaceOilJob : JobParentClass
             typeOfJob = "Oil";
             done = true;
             message = "OIL replaced successfully!";
-            //reward
         }
         else
         {
             typeOfJob = "Oil";
             done = false;
             message = "WRONG part replaced!";
-            //penalty
         }
         return (typeOfJob, message, done);
     }

@@ -2,7 +2,7 @@ namespace CarService2;
 
 public class Wheel : CarPart
 {
-    private string[] _wheelNames = { "Pirelli", "GoodYear", "Sprinter"};
+    private readonly string[] _wheelNames = { "Pirelli", "GoodYear", "Sprinter"};
     public Wheel()
     {
         Random random = new Random();
@@ -16,8 +16,6 @@ public class Wheel : CarPart
     {
         
     }
-    
-    
     public override string ToString()
     {
         return $"Part name: {Name}, Broken: {IsBroken} ";
